@@ -1,0 +1,7 @@
+{
+    "service": "buckybot",
+    "port": 8001,
+    "facebook": {
+        "webhook_verify_token": "__REPLACE__"
+    }
+}
