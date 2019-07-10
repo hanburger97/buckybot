@@ -6,6 +6,7 @@
   "author": "Han Xiao <han@hanxbox.com>",
   "license": "MIT",
   "dependencies": {
+    "app-module-path": "^2.2.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "nconf": "^0.10.0",
