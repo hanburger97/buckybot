@@ -3,13 +3,13 @@ const path = require('path');
 const rootPath = path.resolve(`${__dirname}/..`);
 require('app-module-path').addPath(rootPath);
 
+const config = require('src/util/config.js');
 
 let server;
 const main = async () => {
 
     // await some DB initialize
     const app = require('src/app.js');
-    const config = require('src/util/config.js');
 
     const port = config.get('port');
 
