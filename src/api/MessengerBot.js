@@ -36,6 +36,9 @@ class MessengerBot extends EventEmitter {
     }
 
     handleMessage(msg) {
-
+        console.log("message received");
+        console.log(msg);
     }
-}   
+}
+
+module.exports = MessengerBot;
