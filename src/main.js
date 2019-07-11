@@ -5,10 +5,12 @@ require('app-module-path').addPath(rootPath);
 
 
 let server;
-const main = () => {
+const main = async () => {
 
     // await some DB initialize
     const app = require('src/app.js');
+    const config = require('src/util/config.js');
+
     const port = config.get('port');
 
     server = app.listen(port, () => {

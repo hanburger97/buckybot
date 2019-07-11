@@ -10,3 +10,5 @@ router.get('/webhook', (req, res) => {
     const MY_TOKEN = config.get('facebook:webhook_verify_token');
 
 })
+
+module.exports = router;
