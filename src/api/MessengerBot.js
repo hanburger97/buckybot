@@ -14,6 +14,7 @@ class MessengerBot extends EventEmitter {
         super();
         this.token = config.get('facebook:page_access_token');
         this.verify_token = config.get('facebook:webhook_verify_token');
+        this.debug = config.get('debug_mode')
     }
 
     getProfile(id) {
@@ -29,7 +30,6 @@ class MessengerBot extends EventEmitter {
     }
 
     verifyWebhook(req) {
-        const _this = this;
         return new Promise((resolve, reject) => {
             let mode = req.query["hub.mode"];
             let token = req.query["hub.verify_token"];
@@ -37,7 +37,7 @@ class MessengerBot extends EventEmitter {
             // Checks if a token and mode is in the query string of the request
             if (mode && token) {
                 // Checks the mode and token sent is correct
-                if (mode === "subscribe" && token === _this.verify_token) {
+                if (mode === "subscribe" && token === this.verify_token) {
                     // Responds with the challenge token from the request
                     resolve(challenge);
                 } else {
@@ -50,8 +50,56 @@ class MessengerBot extends EventEmitter {
     }
 
     handleMessage(msg) {
-        console.log("message received");
-        console.log(msg);
+        return new Promise((resolve, reject) => {
+            // Using an Observer pattern with Javascript Event Handlers
+            for (let entry of msg['entry']) {
+
+                let events = entry['messaging'];
+                for (let event of events) {
+                    if (event.message) {
+
+                    }
+                    // handle postbacks
+                    if (event.postback) {
+                        if (this.debug) {
+                            console.log('MessengerBot::HandlePostback');
+                            console.log(event);
+                        }
+                        this.emitEvent('postback', event)
+                    }
+
+                    // handle message delivered
+                    if (event.delivery) {
+                        this.emitEvent('delivery', event)
+                    }
+
+                    // handle message read
+                    if (event.read) {
+                        this.emitEvent('read', event)
+                    }
+
+                    // handle account_linking
+                    if (event.account_linking && event.account_linking.status) {
+                        if (event.account_linking.status === 'linked') {
+                            this.emitEvent('accountLinked', event)
+                        } else if (event.account_linking.status === 'unlinked') {
+                            this.emitEvent('accountUnlinked', event)
+                        }
+                    }
+                }
+
+            }
+            resolve();
+        })
+
+    }
+
+    emitEvent(type, event) {
+        this.emit(type, {
+            senderId: event.sender.id,
+            payload: event,
+            reply: this.sendMessage.bind(this, event.sender.id)
+        })
     }
 }
 

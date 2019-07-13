@@ -7,11 +7,20 @@
     "start:dev": "nodemon --inspect=0.0.0.0:9873 ./src/main.js",
     "migration:up": "node_modules/.bin/migration.up",
     "migration:down": "node_modules/.bin/migration.rollback",
+    "lint": "eslint src test",
+    "lint:fix": "eslint --fix src test",
     "test": "mocha --color --recursive 'tests'"
   },
   "repository": "https://github.com/hanburger97/buckybot.git",
   "author": "Han Xiao <yhxiao97@gmail.com>",
+  "pre-commit": [
+    "lint:fix"
+  ],
   "license": "MIT",
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "mocha": "^6.1.4"
+  },
   "dependencies": {
     "app-module-path": "^2.2.0",
     "axios": "^0.19.0",

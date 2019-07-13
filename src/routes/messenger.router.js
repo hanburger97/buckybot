@@ -7,15 +7,20 @@ const MessengerBot = require('src/api/MessengerBot.js');
 let bot = new MessengerBot();
 
 router.post('/webhook', (req, res) => {
-    let body = req.body;
-    console.log(body);
-    res.status(200);
+    bot.handleMessage(req.body)
+        .then(() => {
+            res.sendStatus(200);
+        })
+        .catch(err => {
+            res.status(500).send(err);
+        })
+
 });
 
 router.get('/webhook', (req, res) => {
-
     bot.verifyWebhook(req)
         .then((challenge) => {
+            console.log('here');
             res.status(200).send(challenge);
         })
         .catch(() => {
