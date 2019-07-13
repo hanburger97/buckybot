@@ -81,7 +81,8 @@ class MessengerBot extends EventEmitter {
         const events = entry['messaging'];
         for (const event of events) {
           if (event.message) {
-
+            console.log('MessengerBot::HandleMessage');
+            this.emitEvent('message', event);
           }
           // handle postbacks
           if (event.postback) {
@@ -122,9 +123,9 @@ class MessengerBot extends EventEmitter {
     */
   emitEvent(type, event) {
     this.emit(type, {
-      senderId: event.sender.id,
+      senderId: event["sender"]["id"],
       payload: event,
-      reply: this.sendMessage.bind(this, event.sender.id),
+      reply: this.sendMessage.bind(this, event.sender.id)
     });
   }
 }

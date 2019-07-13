@@ -1,6 +1,29 @@
 {
     "service": "buckybot",
     "port": 8001,
+    "db": {
+        "username": "postgres",
+        "password": "postgres",
+        "database": "bucky",
+        "host": "db",
+        "port": 5432,
+        "dialect": "postgres",
+        "schema": "Bucky",
+        "snake_case": true,
+        "logging": false,
+        "max_page_size": 500,
+        "replication": false,
+        "dialect_options": {
+            "ssl": false,
+            "prependSearchPath": true
+        },
+        "model_path": "src/model/",
+        "migrations": {
+            "path": "migrations/",
+            "model_name": "Migrations",
+            "pattern": "^.+\\.js$"
+        }
+    },
     "facebook": {
         "webhook_verify_token": "__REPLACE__"
     }

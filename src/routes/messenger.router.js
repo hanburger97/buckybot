@@ -2,9 +2,9 @@
 // const config = require('src/util/config.js');
 const router = require('express').Router();
 
-const MessengerBot = require('src/api/MessengerBot.js');
+// const MessengerBot = require('src/api/MessengerBot.js');
 
-const bot = new MessengerBot();
+const bot = require('src/bot.js');
 
 router.post('/webhook', (req, res) => {
   bot.handleMessage(req.body)
