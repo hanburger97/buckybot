@@ -13,45 +13,44 @@ const NOTIFICATION_TYPE = {
  */
 class MessengerBot extends EventEmitter {
   /**
-         * Constructor
-         */
+    * Constructor
+    */
   constructor() {
     super();
     this.token = config.get('facebook:page_access_token');
     this.verify_token = config.get('facebook:webhook_verify_token');
     this.debug = config.get('debug_mode');
   }
-
   /**
-           * @param {id} id
-           */
+    * @param {id} id
+    */
   getProfile(id) {
 
   }
 
   /**
-           * @description sends a message to each recipients
-           * @param {list<id>} recipients
-           * @param {string} message
-           * @param {enum} notification_type
-           */
+    * @description sends a message to each recipients
+    * @param {list<id>} recipients
+    * @param {string} message
+    * @param {enum} notification_type
+    */
   sendMessage(recipients, message,
       notification_type = NOTIFICATION_TYPE.REGULAR) {
 
   }
 
   /**
-           * @param {list<id>} recipients
-           * @param {object} senderActions
-           */
+    * @param {list<id>} recipients
+    * @param {object} senderActions
+    */
   sendSenderAction(recipients, senderActions) {
 
   }
 
   /**
-           * @param {object} req
-           * @return {Promise} a promise
-           */
+    * @param {object} req
+    * @return {Promise} a promise
+    */
   verifyWebhook(req) {
     return new Promise((resolve, reject) => {
       const mode = req.query['hub.mode'];
@@ -72,9 +71,9 @@ class MessengerBot extends EventEmitter {
   }
 
   /**
-           * @param {object} msg
-           * @return {Promise}
-           */
+    * @param {object} msg
+    * @return {Promise}
+    */
   handleMessage(msg) {
     return new Promise((resolve, reject) => {
       // Using an Observer pattern with Javascript Event Handlers
@@ -118,9 +117,9 @@ class MessengerBot extends EventEmitter {
   }
 
   /**
-           * @param {string} type
-           * @param {object} event
-           */
+    * @param {string} type
+    * @param {object} event
+    */
   emitEvent(type, event) {
     this.emit(type, {
       senderId: event.sender.id,
