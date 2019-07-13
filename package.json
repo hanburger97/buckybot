@@ -7,8 +7,8 @@
     "start:dev": "nodemon --inspect=0.0.0.0:9873 ./src/main.js",
     "migration:up": "node_modules/.bin/migration.up",
     "migration:down": "node_modules/.bin/migration.rollback",
-    "lint": "eslint src test",
-    "lint:fix": "eslint --fix src test",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src",
     "test": "mocha --color --recursive 'tests'"
   },
   "repository": "https://github.com/hanburger97/buckybot.git",
@@ -19,6 +19,7 @@
   "license": "MIT",
   "devDependencies": {
     "eslint": "^6.0.1",
+    "eslint-config-google": "^0.13.0",
     "mocha": "^6.1.4"
   },
   "dependencies": {
