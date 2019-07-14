@@ -18,6 +18,12 @@ const ExpenseModel = DB.sequelize.define('Expenses', {
     unique: true,
   },
 
+  // Owner of this expense, person who paid and is owed money
+  payerId: {
+    type: DB.Sequelize.UUID,
+    allowNull: false,
+  },
+
   amount: {
     type: DB.Sequelize.FLOAT,
     defaultValue: 0.0,
@@ -40,6 +46,7 @@ const ExpenseModel = DB.sequelize.define('Expenses', {
 
 });
 
-ExpenseModel.validFields = ['amount', 'currency', 'title', 'description'];
+
+ExpenseModel.validFields = ['amount', 'currency', 'title', 'payerId', 'description'];
 
 module.exports = ExpenseModel;
