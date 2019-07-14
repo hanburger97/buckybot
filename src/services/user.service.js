@@ -8,7 +8,7 @@ const UserService = {
 
   create: (userData) => {
     const filteredData = _.pick(userData, UserModel.validFields);
-    UserModel.create(filteredData);
+    return UserModel.create(filteredData);
   },
 
   /**
