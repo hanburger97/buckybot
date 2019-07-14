@@ -123,9 +123,9 @@ class MessengerBot extends EventEmitter {
     */
   emitEvent(type, event) {
     this.emit(type, {
-      senderId: event["sender"]["id"],
+      senderId: event['sender']['id'],
       payload: event,
-      reply: this.sendMessage.bind(this, event.sender.id)
+      reply: this.sendMessage.bind(this, event.sender.id),
     });
   }
 }

@@ -5,8 +5,8 @@ const bot = new MessengerBot();
 const MessageHandler = require('src/api/handlers/MessageHandler.js');
 
 init = () => {
-    console.log("Bot initializing");
-}
+  console.log('Bot initializing');
+};
 
 // registerHandlers = () => {
 //     console.log('Start registrating handlers');

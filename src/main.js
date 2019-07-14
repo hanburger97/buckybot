@@ -29,7 +29,7 @@ const main = async () => {
     const handler = new MessageHandler();
     bot.on('message', (args) => {
       handler.handle(args);
-    })
+    });
   });
 };
 

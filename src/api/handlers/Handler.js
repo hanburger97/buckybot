@@ -1,7 +1,6 @@
 'use strict';
 
 class Handler {
-
-    handle(args){}
+  handle(args) {}
 }
 module.exports = Handler;
