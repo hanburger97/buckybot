@@ -29,6 +29,17 @@ class ExpenseTracker {
   }
 
   /**
+   * Attach people to an existing expense
+   * @param {UUID} expenseId 
+   * @param {list<object<UUID>>} people 
+   */
+  async AddPeopleToExpense(expenseId, people){
+    let users = await UserService.getManyById(people);
+    let expense = await ExpenseService.getById(expenseId);
+    await expense.addUsers(users);
+  }
+
+  /**
      * Aggregates all the amount the owner is owed and all the people owing
      * @param {UUID} ownerId
      * @returns {list<object<...user, amount>>}
@@ -36,7 +47,7 @@ class ExpenseTracker {
   async getAmountOwed(ownerId) {
     const owedExpenses = await ExpenseService.findByPayerId(ownerId);
     let debtors;
-    for (const expense of owedExpenses) {
+    for (let expense of owedExpenses) {
       let users = await expense.getUsers();
       users = _.map(users, (usr) => {
         return usr.toJSON();
@@ -76,6 +87,16 @@ class ExpenseTracker {
         .value();
     return debts;
   }
+
+  async clearDebts(ownerId, debtorId){
+    const debtor = await UserService.getUserById(debtorId);
+    let expenses = await debtor.getExpenses();
+    expenses = _(expenses).filter(exp => {return exp.payerId === ownerId});
+    for (let exp of expenses){
+        await exp.removeUser(debtor);
+    }
+  }
+
 }
 
 module.exports = ExpenseTracker;

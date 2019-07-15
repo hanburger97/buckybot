@@ -38,6 +38,14 @@ const UserService = {
     });
   },
 
+  getManyById: (userIds) => {
+      return UserModel.findAll({
+          where: {
+              externalId: userIds
+        }
+      });
+  },
+
 
   getUserByPSID: (psid) => {
     return UserModel.findOne({

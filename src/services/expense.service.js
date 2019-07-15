@@ -21,6 +21,14 @@ const ExpenseService = {
     });
   },
 
+  getById: (expenseId) => {
+    return ExpenseModel.findOne({
+        where: {
+            externalId: expenseId
+        }
+    });
+  },
+
   findByPayerId: (payerId) => {
     return ExpenseModel.findAll({
       where: {
