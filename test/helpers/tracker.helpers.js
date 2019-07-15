@@ -24,6 +24,13 @@ const ExpenseTrackerHelpers = {
         }
     ],
 
+    getSampleUsers: async () => {
+        const users = await UserModel.findAll();
+        return Promise.all(users.map(x => {
+            return x.toJSON();
+        }))
+    },
+
     createUsers: (users) => {
         return Promise.all(users.map((usr) => {
             return UserModel.create(usr);

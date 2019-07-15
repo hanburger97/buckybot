@@ -45,7 +45,7 @@ const createUserTable = (queryInstance, schema, Sequelize) => {
                 allowNull: false
             },
 
-            fristName: {
+            firstName: {
                 type: Sequelize.TEXT
             },
 

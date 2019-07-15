@@ -18,6 +18,11 @@ const ExpenseModel = DB.sequelize.define('Expenses', {
     unique: true,
   },
 
+  title: {
+    type: DB.Sequelize.TEXT,
+    allowNull: false
+  },
+
   // Owner of this expense, person who paid and is owed money
   payerId: {
     type: DB.Sequelize.UUID,
@@ -36,16 +41,44 @@ const ExpenseModel = DB.sequelize.define('Expenses', {
     allowNull: false,
   },
 
-  title: {
-    type: DB.Sequelize.TEXT,
-  },
-
   description: {
     type: DB.Sequelize.TEXT,
   },
 
+},{
+  validate: {
+    externalIdImmutable: function() {
+      if (this.changed('externalId')) {
+        throw new Error('`externalId` cannot be changed after expense creation.');
+      }
+    }
+  },
+  paranoid: false,
 });
 
+
+ExpenseModel.prototype.toJSON = function(unsafe = false) {
+  if (unsafe === true) {
+    return _.clone(this.get({plain: true}));
+  }
+  const self = this;
+  const json = [
+    'title', 'payerId', 'amount',
+    'currency', 'description',
+  ]
+      .map((key) => {
+        return [key, self.get(key)];
+      })
+      .filter(([field, value]) => {
+        return !!value;
+      })
+      .reduce((acc, [key, value]) => {
+        return {...acc, [key]: value};
+      }, {});
+
+  json.id = this.get('externalId');
+  return json;
+};
 
 ExpenseModel.validFields = ['amount', 'currency', 'title', 'payerId', 'description'];
 

@@ -10,7 +10,7 @@ const ExpenseService = {
     const filteredData = _.pick(expenseData, ExpenseModel.validFields);
     return ExpenseModel.create(filteredData);
   },
-
+ 
   updateExpense: (expenseId, data) => {
     const filteredData = _.pick(data, ExpenseModel.validFields);
     return ExpenseModel.update({

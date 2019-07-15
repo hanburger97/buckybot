@@ -28,11 +28,12 @@ const createExpenseTable = (queryInstance, schema, Sequelize) => {
                 unique: true,
                 allowNull: false
             },
-            name: {
+            
+            title: {
                 type: Sequelize.STRING,
-                allowNull: false,
-                unique: true
+                allowNull: false
             },
+
             payerId: {
                 type: Sequelize.UUID,
                 allowNull: false
@@ -47,11 +48,7 @@ const createExpenseTable = (queryInstance, schema, Sequelize) => {
                 type: Sequelize.TEXT,
                 allowNull: false
             },
-        
-            title: {
-                type: Sequelize.TEXT
-            },
-        
+            
             description: {
                 type: Sequelize.TEXT
             },

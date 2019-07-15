@@ -113,11 +113,10 @@ const UserModel = DB.sequelize.define('Users', {
   validate: {
     externalIdImmutable: function() {
       if (this.changed('externalId')) {
-        throw new Error('`externalId` cannot be changed after account creation.');
+        throw new Error('`externalId` cannot be changed after user creation.');
       }
     },
   },
-
   paranoid: false,
 });
 

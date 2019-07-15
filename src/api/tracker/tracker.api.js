@@ -33,7 +33,7 @@ class ExpenseTracker {
    * @param {UUID} expenseId 
    * @param {list<object<UUID>>} people 
    */
-  async AddPeopleToExpense(expenseId, people){
+  async addPeopleToExpense(expenseId, people){
     let users = await UserService.getManyById(people);
     let expense = await ExpenseService.getById(expenseId);
     await expense.addUsers(users);
@@ -42,28 +42,43 @@ class ExpenseTracker {
   /**
      * Aggregates all the amount the owner is owed and all the people owing
      * @param {UUID} ownerId
-     * @returns {list<object<...user, amount>>}
+     * @returns {map<userId, object<total, list<>>>>}
      */
   async getAmountOwed(ownerId) {
     const owedExpenses = await ExpenseService.findByPayerId(ownerId);
-    let debtors;
+    let debtors = [];
     for (let expense of owedExpenses) {
       let users = await expense.getUsers();
+      let user_size = users.length;
+
       users = _.map(users, (usr) => {
-        return usr.toJSON();
+        let res = usr.toJSON();
+        // Aggregate by expense
+        res.amount_owed = (expense.amount / user_size);
+        res.expense_ref = expense.externalId;
+        return res;
       });
-      debtors+= users;
+      
+      debtors.push(...users);
     }
-    debtors = _(debtors)
-        .groupBy('id')
-        .map((objs, key) => ({
-          'id': key,
-          'psid': objs.psid || null,
-          'name': objs.name,
-          'amount': _.sumBy(objs, 'amount'),
-        }))
-        .value();
-    return debtors;
+    // Need to aggregate by each user. using a map
+    let res = {}
+    for(let x of debtors){
+      if (undefined !== res[x.id] && null !== res[x.id]){
+        res[x.id]['total'] = res[x.id]['total']+ x.amount_owed;
+        res[x.id]['expenses'].push(x.expense_ref) ;
+      }
+      else {
+        res[x.id] = {
+          total: x.amount_owed,
+          name: x.name,
+          expenses: [
+            x.expense_ref
+          ]
+        }
+      }
+    }
+    return res;
   }
 
 
