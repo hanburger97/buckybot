@@ -34,6 +34,11 @@ describe('ExpenseTracker API Unit Tests',() => {
         await ExpenseTrackerHelpers.clearAllExpenses();
         await ExpenseTrackerHelpers.clearAllAssociations();
     });
+
+    afterEach('Clear Expense and associtations', async () => {
+        await ExpenseTrackerHelpers.clearAllExpenses();
+        await ExpenseTrackerHelpers.clearAllAssociations();
+    });
     
     it('creates a new expense for user0 by id and by PSID', async () => {
         let usr0 = sampleUsers[0];
@@ -49,7 +54,7 @@ describe('ExpenseTracker API Unit Tests',() => {
     it('gets amount owed for one expense associated with 2 users', async () => {
         let usr0 = sampleUsers[0];
         const sharedExpense = await expenseTrackerAPI.createNewExpense(
-            'shared_expense', 40.0, usr0
+            'shared_expense', 60.0, usr0
         );
         sharedExpense.id.should.exist;
         await expenseTrackerAPI.addPeopleToExpense(sharedExpense.id, [
@@ -62,6 +67,43 @@ describe('ExpenseTracker API Unit Tests',() => {
         amountOwed[sampleUsers[2].id].should.exist;
         amountOwed[sampleUsers[1].id]['total'].should.equal(20.0);
         amountOwed[sampleUsers[2].id]['total'].should.equal(20.0);
+    });
+
+    it('gets how much one owes', async () => {
+        const usr0 = sampleUsers[0];
+        const usr1 = sampleUsers[1];
+        const usr2 = sampleUsers[2];
+
+        const firstExpense = await expenseTrackerAPI.createNewExpense(
+            'expense_f1', 60.60, usr1
+        ); 
+        const secondExpense = await expenseTrackerAPI.createNewExpense(
+            'expense_f1', 22.50, usr1
+        );
+        const thirdExpense = await expenseTrackerAPI.createNewExpense(
+            'expense_f1', 100.90, usr0
+        );
+
+        await expenseTrackerAPI.addPeopleToExpense(firstExpense.id, [
+            usr2.id, usr0.id
+        ]);// 20.20 / person owes to usr1
+        await expenseTrackerAPI.addPeopleToExpense(secondExpense.id, [usr2.id]);
+        // 11.25 /person owes to usr1
+        await expenseTrackerAPI.addPeopleToExpense(thirdExpense.id, [usr2.id]);
+        // 50.45 / person owes to usr0
+
+        // Total : 31.45 to usr1 and 50.45 to usr2
+        const res = await expenseTrackerAPI.getDebts(usr2.id);
+
+        res.length.should.equal(2);
+        res[0].payerId.should.exist;
+        res[0].payerId.should.equal(usr1.id);
+        res[0].total.should.equal((60.6/3 + 22.50/2));
+        res[1].payerId.should.exist;
+        res[1].payerId.should.equal(usr0.id);
+        res[1].total.should.equal((100.90/2));
+
+
     })
 
     

@@ -49,7 +49,8 @@ class ExpenseTracker {
     let debtors = [];
     for (let expense of owedExpenses) {
       let users = await expense.getUsers();
-      let user_size = users.length;
+      let user_size = users.length + 1;
+      // Note the +1 includes the equal splitting including owner of this expense
 
       users = _.map(users, (usr) => {
         let res = usr.toJSON();
@@ -90,14 +91,21 @@ class ExpenseTracker {
   async getDebts(debtorId) {
     const debtor = await UserService.getUserById(debtorId);
     let expenses = await debtor.getExpenses();
-    expenses = _(expenses).map((exp) => {
-      return exp.toJSON();
-    });
-    const debts = _(expenses)
+
+    let exps = []
+    for (let exp of expenses){
+      let others = await exp.getUsers();
+      const share_size = others.length + 1;
+      let res = exp.toJSON();
+      res.amount = res.amount / share_size;
+      exps.push(res);
+    }
+    const debts = _(exps)
         .groupBy('payerId')
         .map((objs, key) => ({
+          expenses_ref: objs.map(x => x.id),
           payerId: key,
-          amount: _.sumBy(objs, 'amount'),
+          total: _.sumBy(objs, 'amount'),
         }))
         .value();
     return debts;
