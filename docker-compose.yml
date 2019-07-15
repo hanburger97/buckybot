@@ -1,0 +1,35 @@
+version: '2.1'
+services:
+  bucky:
+    extends:
+      file: config.yml
+      service: bucky
+    build:
+        context: ./
+        dockerfile: Dockerfile.dev
+        args:
+          XNPM_TOKEN_ARG: ${XNPM_TOKEN}
+    image: bucky:dev
+    ports:
+      - "8001:8001"
+      - "9873:9873"
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=rentals
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgres/data
+    healthcheck:
+      test: "pg_isready -h localhost -p 5432 -q -U postgres"
+      interval: 1s
+      timeout: 1s
+      retries: 100
+volumes:
+  db_data:
