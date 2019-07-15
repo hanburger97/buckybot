@@ -14,7 +14,7 @@ const Migration = {
 };
 
 const createUsersExpensesJoinTable = (queryInterface, schema, Sequelize) => {
-    queryInterface.createTable(
+    return queryInterface.createTable(
         'UsersExpenses',
         {
             id: {

@@ -10,6 +10,7 @@ services:
         args:
           XNPM_TOKEN_ARG: ${XNPM_READ_TOKEN}
     image: bucky:dev
+    command: ["bash", "-c", "npm run migration:up && npm run start:dev"]
     volumes:
       - ./:/usr/src/app
     ports:

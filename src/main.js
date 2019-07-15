@@ -8,18 +8,19 @@ const db = require('@xentreprise/cloud-db');
 
 let server;
 const main = async () => {
+
   // await some DB initialize
-  console.log(config.get('database_url'),
-  config.get('db'));
   await db.initialize(
     config.get('database_url'),
     config.get('db'),
     console.log
   );
-  console.log('Database Initialized');
-
+  
+  // For Heroku Server : since cannot manually run 2 scripts
   await db.migrate();
   console.log('Migration ran');
+
+  console.log('DB synced');
 
   const app = require('src/app.js');
 

@@ -21,6 +21,7 @@
   "devDependencies": {
     "eslint": "^6.0.1",
     "eslint-config-google": "^0.13.0",
+    "nodemon": "^1.19.1",
     "mocha": "^6.1.4"
   },
   "dependencies": {
@@ -31,8 +32,9 @@
     "express": "^4.17.1",
     "lodash": "^4.17.14",
     "nconf": "^0.10.0",
-    "nodemon": "^1.19.1",
     "path": "^0.12.7",
+    "pg": "^7.11.0",
+    "pg-hstore": "^2.3.3",
     "splitwise": "^1.0.0",
     "uuid": "^3.3.2",
     "uuid-validate": "^0.0.3"
