@@ -3,6 +3,7 @@
 const _ = require('lodash');
 
 const UserModel = require('src/models/user.model.js');
+const ExpenseModel = require('src/model/expense.model.js');
 
 const UserService = {
 
@@ -28,6 +29,7 @@ const UserService = {
     });
   },
 
+
   getUserById: (userId) => {
     return UserModel.findOne({
       where: {
@@ -47,6 +49,26 @@ const UserService = {
 
   getUserByASID: (asid) => {
     // To be implemented
+  },
+
+  addExpenseToManyUsers: (expenseId, userIds) => {
+    let users;
+    return UserModel.findAll({
+      where: {
+        externalId: userIds,
+      },
+    })
+        .then((usrs) => {
+          users = usrs;
+          return ExpenseModel.findOne({
+            where: {
+              externalId: expenseId,
+            },
+          });
+        })
+        .then((expense) => {
+          return expense.addUsers(users);
+        });
   },
 };
 

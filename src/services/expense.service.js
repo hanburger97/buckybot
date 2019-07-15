@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 
 const ExpenseModel = require('src/models/expense.model.js');
+const UserModel = require('src/model/user.model.js');
 
 const ExpenseService = {
 
@@ -20,6 +21,14 @@ const ExpenseService = {
     });
   },
 
+  findByPayerId: (payerId) => {
+    return ExpenseModel.findAll({
+      where: {
+        payerId,
+      },
+    });
+  },
+
   deleteExpense: (expenseId) => {
     return ExpenseModel.delete({
       where: {
@@ -27,6 +36,8 @@ const ExpenseService = {
       },
     });
   },
+
+
 };
 
 module.exports = ExpenseService;

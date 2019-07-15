@@ -1,5 +1,5 @@
 'use strict';
-const Handler = require('src/api/handlers/Handler.js');
+const Handler = require('src/api/fb/handlers/handler.js');
 
 class MessageHandler extends Handler {
   handle(args) {

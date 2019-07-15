@@ -8,14 +8,13 @@ const db = require('@xentreprise/cloud-db');
 
 let server;
 const main = async () => {
-
   // await some DB initialize
   await db.initialize(
-    config.get('database_url'),
-    config.get('db'),
-    console.log
+      config.get('database_url'),
+      config.get('db'),
+      console.log
   );
-  
+
   // For Heroku Server : since cannot manually run 2 scripts
   await db.migrate();
   console.log('Migration ran');
@@ -30,7 +29,7 @@ const main = async () => {
     console.log(`${config.get('service')} listening on ${port}`);
 
     const bot = require('src/bot.js');
-    const MessageHandler = require('src/api/handlers/MessageHandler.js');
+    const MessageHandler = require('src/api/fb/handlers/message.handler.js');
     const handler = new MessageHandler();
     bot.on('message', (args) => {
       handler.handle(args);
