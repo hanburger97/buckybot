@@ -13,12 +13,14 @@ const ExpenseService = {
  
   updateExpense: (expenseId, data) => {
     const filteredData = _.pick(data, ExpenseModel.validFields);
-    return ExpenseModel.update({
-      where: {
-        externalId: expenseId,
-      },
+    return ExpenseModel.update(
       filteredData,
-    });
+      {
+        where: {
+          externalId: expenseId
+        }
+      }
+    );
   },
 
   getById: (expenseId) => {

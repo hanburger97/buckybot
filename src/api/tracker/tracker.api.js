@@ -116,7 +116,12 @@ class ExpenseTracker {
     let expenses = await debtor.getExpenses();
     expenses = _(expenses).filter(exp => {return exp.payerId === ownerId});
     for (let exp of expenses){
+        let others = await exp.getUsers();
+        const share_size = others.length + 1;
         await exp.removeUser(debtor);
+        await ExpenseService.updateExpense(exp.externalId, {
+          amount: exp.amount * (1 - 1/share_size)
+        })
     }
   }
 

@@ -102,7 +102,33 @@ describe('ExpenseTracker API Unit Tests',() => {
         res[1].payerId.should.exist;
         res[1].payerId.should.equal(usr0.id);
         res[1].total.should.equal((100.90/2));
+    });
 
+    it('tests the debt clearing for a given debtor and a owner', async () => {
+        const usr0 = sampleUsers[0];
+        const usr1 = sampleUsers[1];
+        const usr2 = sampleUsers[2];
+        const exp_1 = await expenseTrackerAPI.createNewExpense(
+            'expense_d1', 60, usr0
+        );
+        const exp_2 = await expenseTrackerAPI.createNewExpense(
+            'expense_d2', 40, usr1
+        );
+        const exp_3 = await expenseTrackerAPI.createNewExpense(
+            'expense_d3', 40, usr0
+        );
+
+        await expenseTrackerAPI.addPeopleToExpense(exp_2.id, [usr2.id]);
+        await expenseTrackerAPI.addPeopleToExpense(exp_1.id, [usr1.id, usr2.id]);
+        await expenseTrackerAPI.addPeopleToExpense(exp_3.id, [usr2.id]);
+        
+        await expenseTrackerAPI.clearDebts(usr0.id, usr2.id);
+
+        const res = await expenseTrackerAPI.getDebts(usr2.id);
+
+        res.length.should.equal(1);
+        res[0].payerId.should.equal(usr1.id);
+        res[0].total.should.equal(20.0);
 
     })
 
