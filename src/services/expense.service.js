@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 
-const ExpenseModel = require('src/models/expense.model.js');
+const ExpenseModel = require('src/model/expense.model.js');
 const UserModel = require('src/model/user.model.js');
 
 const ExpenseService = {

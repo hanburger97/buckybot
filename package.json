@@ -10,7 +10,7 @@
     "migration:generate": "node scripts/migration.generate.js",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
-    "test": "mocha --color --recursive 'tests'"
+    "test": "mocha --color --recursive 'test'"
   },
   "repository": "https://github.com/hanburger97/buckybot.git",
   "author": "Han Xiao <yhxiao97@gmail.com>",
@@ -19,10 +19,13 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "chai-string": "^1.5.0",
     "eslint": "^6.0.1",
     "eslint-config-google": "^0.13.0",
-    "nodemon": "^1.19.1",
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "nodemon": "^1.19.1"
   },
   "dependencies": {
     "@xentreprise/cloud-db": "^1.0.2",

@@ -22,7 +22,7 @@ const createUserTable = (queryInstance, schema, Sequelize) => {
                 primaryKey: true,
                 autoIncrement: true,
             },
-
+            
             externalId: {
                 type: Sequelize.UUID,
                 unique: true,
@@ -33,7 +33,9 @@ const createUserTable = (queryInstance, schema, Sequelize) => {
                 allowNull: false,
                 unique: true
             },
-            
+            email: {
+                type: Sequelize.STRING
+            },
             FBasid: {
                 type: Sequelize.TEXT
             },
@@ -49,7 +51,10 @@ const createUserTable = (queryInstance, schema, Sequelize) => {
 
             lastName: {
                 type: Sequelize.TEXT
-            }
+            },
+            createdAt: { type: Sequelize.DATE },
+            updatedAt: { type: Sequelize.DATE },
+            deletedAt: { type: Sequelize.DATE }
         },{
             schema: schema
         }

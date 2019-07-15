@@ -57,6 +57,7 @@ const createExpenseTable = (queryInstance, schema, Sequelize) => {
             },
             createdAt: { type: Sequelize.DATE },
             updatedAt: { type: Sequelize.DATE },
+            deletedAt: { type: Sequelize.DATE }
             
         },{
             schema: schema

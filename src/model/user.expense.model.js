@@ -2,8 +2,8 @@ const _ = require('lodash');
 
 const DB = require('@xentreprise/cloud-db');
 
-const UserModel = require('src/models/user.model.js');
-const ExpenseModel = require('src/models/expense.model.js');
+const UserModel = require('src/model/user.model.js');
+const ExpenseModel = require('src/model/expense.model.js');
 
 
 // We are defining a join table used for the Many-Many association
