@@ -31,11 +31,11 @@ const UserModel = DB.sequelize.define('Users', {
   },
 
   FBasid: {
-    type: DB.sequelize.TEXT,
+    type: DB.Sequelize.TEXT
   },
 
   FBpsid: {
-    type: DB.sequelize.TEXT,
+    type: DB.Sequelize.TEXT
   },
 
   firstName: {
