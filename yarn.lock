@@ -28,10 +28,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.6.2.tgz#a5ccec6abb6060d5f20d256fb03ed743e9774999"
   integrity sha512-gojym4tX0FWeV2gsW4Xmzo5wxGjXGm550oVUII7f7G5o4BV6c7DBdiG1RRQd+y1bvqRyYtPfMK85UM95vsapqQ==
 
-"@xentreprise/cloud-db@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@xentreprise/cloud-db/-/cloud-db-1.0.0.tgz#34934f5ad50f44319500a33741eccac8ff83ce2a"
-  integrity sha512-TlSFq9BLA1DunQLcVlhqOtYBEFEMRi3lxSu+JthYAdSVOpJPXB5lGjgc8N/c8ByiR4+p049WA1m6iWmpn+lyNQ==
+"@xentreprise/cloud-db@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@xentreprise/cloud-db/-/cloud-db-1.0.2.tgz#880159538979211c19f9ab675d19acdf03c7c4ca"
+  integrity sha512-KEm2bqmTIxN06loKvsxhO8trdm27OoITk9Zb8nKhS0FWbz/X23UzbUSt5zfhYvW7uhTWV93xLW4Qve2abVV9gw==
   dependencies:
     lodash "4.17.4"
     pg "^7.4.3"

@@ -9,13 +9,17 @@ const db = require('@xentreprise/cloud-db');
 let server;
 const main = async () => {
   // await some DB initialize
-  // await db.initialize(
-  //   config.get('database_url'),
-  //   config.get('db'),
-  //   console.log
-  // );
+  console.log(config.get('database_url'),
+  config.get('db'));
+  await db.initialize(
+    config.get('database_url'),
+    config.get('db'),
+    console.log
+  );
   console.log('Database Initialized');
 
+  await db.migrate();
+  console.log('Migration ran');
 
   const app = require('src/app.js');
 

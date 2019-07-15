@@ -7,7 +7,7 @@ const Migration = {
     },
 
     down: (queryInterface, schema, Sequelize) => {
-        return queryInterface.sequelize.transaction((transaction) => {
+        return queryInterface.sequelize.transaction( async (transaction) => {
             await queryInterface.dropTable({ tableName: 'UsersExpenses', schema });
         });
     }
