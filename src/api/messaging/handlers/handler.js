@@ -34,6 +34,10 @@ class BaseHandler{
             {
                 title: 'View tab summary',
                 payload: 'SUMMARY'
+            },
+            {
+                title: 'View group expenses',
+                payload: 'VIEW_GROUP_EXPENSES'
             }
         ]))
     }

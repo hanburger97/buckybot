@@ -31,6 +31,10 @@ class GreetingsHandler extends BaseHandler {
                     payload: 'ADD_EXPENSE'
                 },
                 {
+                    title: 'View group expenses',
+                    payload: 'VIEW_GROUP_EXPENSES'
+                },
+                {
                     title: 'View tab summary',
                     payload: 'SUMMARY'
                 }

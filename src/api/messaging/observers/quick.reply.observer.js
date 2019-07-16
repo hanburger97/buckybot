@@ -16,8 +16,6 @@ class QuickReplyObserver extends BaseObserver{
     async handle(args){
         const user = await this.fixUser(args);
         const payload = args.payload.message.quick_reply.payload;
-
-
         try{
           if(this.handlers.expense.canHandle({payload})){
               await this.handlers.expense.handlePostBack({

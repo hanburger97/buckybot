@@ -3,13 +3,15 @@ const BaseHandler = require('src/api/messaging/handlers/handler.js');
 
 const ExpenseTracker = require('src/api/tracker/tracker.api.js');
 const Templates = require('src/api/messaging/templates/message.template.js');
+const ExpenseService = require('src/services/expense.service.js');
 
 class ExpenseHandler extends BaseHandler {
     constructor() {
         super();
         this.tracker = new ExpenseTracker();
         this.targetPayload = [
-            'ADD_EXPENSE'
+            'ADD_EXPENSE',
+            'VIEW_GROUP_EXPENSES'
         ];
     }
 
@@ -44,8 +46,8 @@ class ExpenseHandler extends BaseHandler {
                 await reply(Templates.createQuickReplies(
                     `I updated everyone's total for the new expense`, [
                         {
-                            title: 'Check my tab',
-                            payload: 'CHECK_MY_STATUS'
+                            title: 'View group expenses',
+                            payload: 'VIEW_GROUP_EXPENSES'
                         },
                         {
                             title: 'View tab summary',
@@ -63,8 +65,25 @@ class ExpenseHandler extends BaseHandler {
         })
     }
 
-    handlePostBack({user, postback, reply}) {
-        return reply(Templates.createText('To add an expense simply type something like "add an expense of 20$"'));
+    async listExpenses(userId, name, reply){
+        let expenses = await ExpenseService.findByPayerId(userId);
+        for(let exp of expenses){
+            await reply(Templates.createText(`${name} paid ${exp.amount}$ for ${exp.title}`));
+        }
+
+    }
+
+    async handlePostBack({user, postback, reply}) {
+        if ('ADD_EXPENSE' === postback){
+            await reply(Templates.createText('Alrighty, so to add an expense simply type something like "@Bucky add an expense for 20$"'));
+        }
+        else if ('VIEW_GROUP_EXPENSES' === postback){
+            await this.listExpenses(user.id, 'You', reply);
+            const others = this.getConversationUsers();
+            for (let o of others){
+                await this.listExpenses(o.externalId, o.name, reply);
+            }
+        }
     }
 }
 

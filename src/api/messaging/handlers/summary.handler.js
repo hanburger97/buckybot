@@ -24,7 +24,7 @@ class SummaryHandler extends BaseHandler {
         // start with main user
         let res = await this.tracker.getSummary(user.id);
         for (let name of Object.keys(res)){
-            let str = res[name] > 0 ? `${name} owes you ${res[name]}` : `you owe ${name} ${-1 * res[name]}`; 
+            let str = res[name] > 0 ? `${name} owes you ${res[name]}$` : `you owe ${name} ${-1 * res[name]}$`; 
             await reply(Templates.createText(str));
         }
     }
