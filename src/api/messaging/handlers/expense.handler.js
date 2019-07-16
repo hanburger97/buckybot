@@ -2,9 +2,6 @@
 const BaseHandler = require('src/api/messaging/handlers/handler.js');
 
 const ExpenseTracker = require('src/api/tracker/tracker.api.js');
-const config = require('src/util/config.js');
-
-const demoUtils = require('src/util/demo.js');
 const Templates = require('src/api/messaging/templates/message.template.js');
 
 class ExpenseHandler extends BaseHandler {
@@ -15,13 +12,6 @@ class ExpenseHandler extends BaseHandler {
             'ADD_EXPENSE'
         ];
     }
-
-    getConversationUsers(){
-        if (config.get('demo_mode')){
-            return demoUtils.getDummyUsers();
-        }
-    }
-
 
     canHandle({text, payload, nlp}){
         
@@ -45,18 +35,23 @@ class ExpenseHandler extends BaseHandler {
                     `foobar${Math.floor(Math.random() * 10)}`, parseFloat(payload.value), user
                 );
     
-                await reply(Templates.createText(`Added a new expense ${exp.title} for ${exp.amount}$`));
+                await reply(Templates.createText(`Cool cool cool! I added a new expense ${exp.title} for ${exp.amount}$`));
                 
                 let users = await this.getConversationUsers();
                 let userIds = users.map(x => {return x.externalId});
                 await this.tracker.addPeopleToExpense(exp.id, userIds);
 
                 await reply(Templates.createQuickReplies(
-                    `Updated everyone's total for the new expense`, 
-                    [{
-                        title: 'check my tab',
-                        payload: 'CHECK_STATUS'
-                    }]
+                    `I updated everyone's total for the new expense`, [
+                        {
+                            title: 'Check my tab',
+                            payload: 'CHECK_MY_STATUS'
+                        },
+                        {
+                            title: 'View tab summary',
+                            payload: 'SUMMARY'
+                        }
+                    ]
                 ));
 
                 resolve();

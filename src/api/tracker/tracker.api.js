@@ -126,6 +126,31 @@ class ExpenseTracker {
     }
   }
 
+  async getSummary(ownerId){
+    let owed = await this.getAmountOwed(ownerId);
+    let debt = await this.getDebts(ownerId);
+    let res = {}
+    for (let key of Object.keys(owed)){
+      if (res[owed[key].name]){
+        res[owed[key].name] += owed[key].total;
+      }
+      else {
+        res[owed[key].name] = owed[key].total;
+      }
+    }
+
+    for (let d of debt){
+      let usr = await UserService.getUserById(d.payerId);
+      if (res[usr.name]){
+        res[usr.name] -= d.amount;
+      }
+      else {
+        res[usr.name] = d.amount;
+      }
+    }
+    return res;
+  }
+
 }
 
 module.exports = ExpenseTracker;

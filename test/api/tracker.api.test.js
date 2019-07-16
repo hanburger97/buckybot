@@ -94,7 +94,6 @@ describe('ExpenseTracker API Unit Tests',() => {
 
         // Total : 31.45 to usr1 and 50.45 to usr2
         const res = await expenseTrackerAPI.getDebts(usr2.id);
-
         res.length.should.equal(2);
         res[0].payerId.should.exist;
         res[0].payerId.should.equal(usr1.id);
@@ -125,7 +124,6 @@ describe('ExpenseTracker API Unit Tests',() => {
         await expenseTrackerAPI.clearDebts(usr0.id, usr2.id);
 
         const res = await expenseTrackerAPI.getDebts(usr2.id);
-
         res.length.should.equal(1);
         res[0].payerId.should.equal(usr1.id);
         res[0].total.should.equal(20.0);

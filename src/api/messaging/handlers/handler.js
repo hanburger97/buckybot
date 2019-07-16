@@ -1,6 +1,8 @@
 'use strict';
 const Template = require('src/api/messaging/templates/message.template.js');
+const config = require('src/util/config.js');
 
+const demoUtils = require('src/util/demo.js');
 class BaseHandler{
 
     constructor(){
@@ -11,6 +13,16 @@ class BaseHandler{
         const r = /(.*)@bucky|@Bucky(.*)/
         let m = text.match(r);
         return !!m;
+    }
+
+    getConversationUsers(){
+        if (config.get('demo_mode')){
+            return demoUtils.getDummyUsers();
+        }
+    }
+
+    canHandle({text}){
+        return this.isAddressedToBucky(text);
     }
 
     async handle({user, reply}){

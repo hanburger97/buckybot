@@ -31,8 +31,8 @@ class GreetingsHandler extends BaseHandler {
                     payload: 'ADD_EXPENSE'
                 },
                 {
-                    title: 'Get status',
-                    payload: 'GET_TRACKING_STATUS'
+                    title: 'View tab summary',
+                    payload: 'SUMMARY'
                 }
             ]
         );

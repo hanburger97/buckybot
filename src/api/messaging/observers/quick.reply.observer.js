@@ -2,12 +2,14 @@
 const BaseObserver = require('src/api/messaging/observers/observer.js');
 
 const ExpenseHandler = require('src/api/messaging/handlers/expense.handler.js');
+const SummaryHandler = require('src/api/messaging/handlers/summary.handler.js');
 
 class QuickReplyObserver extends BaseObserver{
     constructor() {
         super();
         this.handlers = {
-          expense: new ExpenseHandler()
+          expense: new ExpenseHandler(),
+          summary: new SummaryHandler()
         }
     }
 
@@ -17,13 +19,17 @@ class QuickReplyObserver extends BaseObserver{
 
 
         try{
-          if(this.handlers.expense.canHandle("", payload)){
+          if(this.handlers.expense.canHandle({payload})){
               await this.handlers.expense.handlePostBack({
                 user, postback:payload, reply:args.reply
               })
           }
-          else {
-            
+          if (this.handlers.summary.canHandle({payload})){
+            await this.handlers.summary.handle({
+              user,
+              payload,
+              reply:args.reply
+            });
           }
         }
         catch(err){
