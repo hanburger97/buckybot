@@ -4,15 +4,18 @@ const router = require('express').Router();
 
 // const MessengerBot = require('src/api/MessengerBot.js');
 
-const bot = require('src/bot.js');
+const bot = require('src/bot.js').bot;
 
 router.post('/webhook', (req, res) => {
-  bot.handleMessage(req.body)
+  
+  bot.notifyObservers(req.body)
       .then(() => {
         res.sendStatus(200);
       })
       .catch((err) => {
-        res.status(500).send(err);
+        //res.status(500).send(err);
+        console.log(err);
+        res.sendStatus(200);
       });
 });
 

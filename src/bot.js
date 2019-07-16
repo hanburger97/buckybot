@@ -2,19 +2,27 @@ const MessengerBot = require('src/api/fb/messenger.api.js');
 
 const bot = new MessengerBot();
 
-const MessageHandler = require('src/api/fb/handlers/message.handler.js');
+const MessageObserver = require('src/api/fb/observers/message.observer.js');
+const PostbackObserver = require('src/api/fb/observers/postback.observer.js');
+const QuickReplyObserver = require('src/api/fb/observers/quick.reply.observer.js');
 
-init = () => {
-  console.log('Bot initializing');
-};
+const observers = {
+  message: new MessageObserver(),
+  postback: new PostbackObserver(),
+  quick_reply: new QuickReplyObserver()
+}
 
-// registerHandlers = () => {
-//     console.log('Start registrating handlers');
-//     const msgHandler = new MessageHandler();
-//     bot.on('message', (args) => {
-//         msgHandler.handle(args)
-//     })
+registerObservers = () => {
+    const observers_keys = Object.keys(observers);
+    for (let key of observers_keys){
+      bot.on(key, (args) => {
+        observers[key].handle(args);
+      });
+      console.log(`Observer for ${key} events: registered`);
+    }
+}
 
-// }
-
-module.exports = bot;
+module.exports = {
+  bot,
+  registerObservers
+}

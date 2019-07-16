@@ -2,11 +2,19 @@
 
 const EventEmitter = require('events').EventEmitter;
 const config = require('src/util/config.js');
-const NOTIFICATION_TYPE = {
-  REGULAR: 'REGULAR',
-  SILENT_PUSH: 'SILENT_PUSH',
-  NO_PUSH: 'NO_PUSH',
-};
+const axios = require('axios');
+
+// const NOTIFICATION_TYPE = {
+//   REGULAR: 'REGULAR',
+//   SILENT_PUSH: 'SILENT_PUSH',
+//   NO_PUSH: 'NO_PUSH',
+// };
+
+const MESSAGE_TYPE = {
+  RESPONSE: 'RESPONSE',
+  UPDATE: 'UPDATE',
+  MESSAGE_TAG: 'MESSAGE_TAG'
+}
 
 /**
  * @extends EventEmitter
@@ -19,13 +27,36 @@ class MessengerBot extends EventEmitter {
     super();
     this.token = config.get('facebook:page_access_token');
     this.verify_token = config.get('facebook:webhook_verify_token');
+    this.baseUrl = config.get('facebook:api_url');
     this.debug = config.get('debug_mode');
+    this.axios = axios.create();
+    this.post = this.post.bind(this);
   }
+
+  post(payload) {
+    return this.axios({
+      method: "POST",
+      ...payload,
+      params: {
+        access_token: this.token
+      }
+    })
+  }
+
+
   /**
     * @param {id} id
     */
-  getProfile(id) {
-
+  getProfile(psid, fields = 'first_name, last_name') {
+    console.log(fields);
+    return this.post({
+          url: `${this.baseUrl}/${psid}`,
+          method: 'GET',
+          params: {
+            access_token: this.token,
+            fields
+          }
+    });
   }
 
   /**
@@ -35,16 +66,45 @@ class MessengerBot extends EventEmitter {
     * @param {enum} notification_type
     */
   sendMessage(recipients, message,
-      notification_type = NOTIFICATION_TYPE.REGULAR) {
+      message_type = MESSAGE_TYPE.RESPONSE) {
+    return this.post({ 
+      url: `${this.baseUrl}/me/messages`,
+      data: {
+        recipient: {id: recipients},
+        message,
+        message_type
+      }
+    });
+  }
 
+  setThreadSettings({ setting_type, threadState, settings }){
+    return axios.post(`${this.baseUrl}/me/thread_settings`,{
+          params: {
+            access_token: this.token
+          },
+          data: {
+            setting_type,
+            threadState,
+            settings
+          }
+    });
   }
 
   /**
     * @param {list<id>} recipients
     * @param {object} senderActions
     */
-  sendSenderAction(recipients, senderActions) {
-
+  sendSenderAction(recipients, sender_action) {
+    return axios.post( `${this.baseUrl}/me/messages`,{
+          params: {
+            access_token: this.token
+          },
+          data: {
+            recipient: {id: recipients},
+            message,
+            sender_action
+          }
+    });
   }
 
   /**
@@ -74,15 +134,26 @@ class MessengerBot extends EventEmitter {
     * @param {object} msg
     * @return {Promise}
     */
-  handleMessage(msg) {
+  notifyObservers(msg) {
     return new Promise((resolve, reject) => {
       // Using an Observer pattern with Javascript Event Handlers
       for (const entry of msg['entry']) {
         const events = entry['messaging'];
         for (const event of events) {
           if (event.message) {
-            console.log('MessengerBot::HandleMessage');
-            this.emitEvent('message', event);
+            if (this.debug){
+              console.log('MessengerBot::HandleMessage');
+              console.log(event);
+            }
+            if (event.message.is_echo) {
+              this.emitEvent('echo', event);
+            } 
+            else if (event.message.quick_reply){
+              this.emitEvent('quick_reply', event)
+            }
+            else {
+              this.emitEvent('message', event);
+            }
           }
           // handle postbacks
           if (event.postback) {
@@ -126,6 +197,7 @@ class MessengerBot extends EventEmitter {
       senderId: event['sender']['id'],
       payload: event,
       reply: this.sendMessage.bind(this, event.sender.id),
+      getProfile: this.getProfile.bind(this, event.sender.id)
     });
   }
 }

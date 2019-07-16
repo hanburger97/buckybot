@@ -17,23 +17,16 @@ const main = async () => {
 
   // For Heroku Server : since cannot manually run 2 scripts
   await db.migrate();
-  console.log('Migration ran');
+  console.log('Migration: ran');
 
-  console.log('DB synced');
+  console.log('Database: synced');
 
   const app = require('src/app.js');
-
   const port = config.get('port');
-
+  const bot = require('src/bot.js');
   server = app.listen(port, () => {
     console.log(`${config.get('service')} listening on ${port}`);
-
-    const bot = require('src/bot.js');
-    const MessageHandler = require('src/api/fb/handlers/message.handler.js');
-    const handler = new MessageHandler();
-    bot.on('message', (args) => {
-      handler.handle(args);
-    });
+    bot.registerObservers();
   });
 };
 

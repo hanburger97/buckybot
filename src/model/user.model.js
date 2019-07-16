@@ -23,7 +23,6 @@ const UserModel = DB.sequelize.define('Users', {
 
   email: {
     type: DB.Sequelize.TEXT,
-    allowNull: false,
     unique: true,
     set: function(val) {
       this.setDataValue('email', UserModel.cleanEmail(val));
