@@ -67,6 +67,9 @@ class ExpenseHandler extends BaseHandler {
 
     async listExpenses(userId, name, reply){
         let expenses = await ExpenseService.findByPayerId(userId);
+        if (0 === expenses.length){
+            reply(Templates.createText(`No expenses added by ${name}`));
+        }
         for(let exp of expenses){
             await reply(Templates.createText(`${name} paid ${exp.amount}$ for ${exp.title}`));
         }
@@ -79,7 +82,7 @@ class ExpenseHandler extends BaseHandler {
         }
         else if ('VIEW_GROUP_EXPENSES' === postback){
             await this.listExpenses(user.id, 'You', reply);
-            const others = this.getConversationUsers();
+            const others = await this.getConversationUsers();
             for (let o of others){
                 await this.listExpenses(o.externalId, o.name, reply);
             }
