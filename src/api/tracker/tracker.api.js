@@ -1,3 +1,4 @@
+'use strict';
 const _ = require('lodash');
 const UserService = require('src/services/user.service.js');
 const ExpenseService = require('src/services/expense.service.js');

@@ -21,7 +21,7 @@ const UserService = {
     const filteredData = _.pick(userData, UserModel.validFields);
     UserModel.findOrCreate({
       where: {
-        psid: userData.psid,
+        ...filteredData
       },
       defaults: filteredData,
     }).then(([users]) => {

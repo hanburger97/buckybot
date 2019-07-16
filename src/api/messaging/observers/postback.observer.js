@@ -1,4 +1,4 @@
-const BaseObserver = require('src/api/fb/observers/observer.js');
+const BaseObserver = require('src/api/messaging/observers/observer.js');
 
 class PostbackObserver extends BaseObserver{
     constructor() {

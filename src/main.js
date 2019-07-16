@@ -20,13 +20,23 @@ const main = async () => {
   console.log('Migration: ran');
 
   console.log('Database: synced');
+  
+  
+  if (config.get('demo_mode')){
+    const demoUtils = require('src/util/demo.js');
+    await demoUtils.initUsers();
+    console.log('Demo users: created')
+  }
+
 
   const app = require('src/app.js');
   const port = config.get('port');
   const bot = require('src/bot.js');
+
   server = app.listen(port, () => {
     console.log(`${config.get('service')} listening on ${port}`);
     bot.registerObservers();
+    
   });
 };
 
