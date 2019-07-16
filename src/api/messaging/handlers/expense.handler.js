@@ -1,9 +1,9 @@
+'use strict';
 const BaseHandler = require('src/api/messaging/handlers/handler.js');
 
 const ExpenseTracker = require('src/api/tracker/tracker.api.js');
 const config = require('src/util/config.js');
 
-'use strict';
 const demoUtils = require('src/util/demo.js');
 const Templates = require('src/api/messaging/templates/message.template.js');
 
@@ -14,9 +14,6 @@ class ExpenseHandler extends BaseHandler {
         this.targetPayload = [
             'ADD_EXPENSE'
         ];
-        this.targetPhrases = [
-            /add expense/, /paid/, /pay/, /owe/
-        ]
     }
 
     getConversationUsers(){
@@ -26,22 +23,19 @@ class ExpenseHandler extends BaseHandler {
     }
 
 
-    canHandle(text="", payload=""){
-        if (""===text && "" === payload){
-            return false;
-        }
-        else if (""!==text) {
-            this.targetPhrases.forEach(regex => {
-                let res = text.match(regex);
-                if (null !== res){
+    canHandle({text, payload, nlp}){
+        
+        if (text && ""!==text) {
+            if (this.isAddressedToBucky(text)){
+                if (nlp && nlp.entities && nlp.entities.amount_of_money){
                     return true;
                 }
-            })
-            return false;
+            }
         }
-        else{
+        else if (payload){
             return this.targetPayload.includes(payload);
         }
+        return false;
     }
 
     async handle({user, payload, reply}) {

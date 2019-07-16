@@ -24,11 +24,12 @@ class MessageObserver extends BaseObserver {
     
 
     try{
-      if (nlp && nlp.entities && nlp.entities.greetings){
-        await this.handlers.greeting.handle({user, payload:textMessage, reply: args.reply});
+      if (this.handlers.greeting.canHandle(textMessage, nlp)){
+        await this.handlers.greeting.handle({user, payload:{textMessage}, reply: args.reply});
+
       }
       
-      if (nlp && nlp.entities && nlp.entities.amount_of_money){
+      if (this.handlers.expense.canHandle({text: textMessage, payload: null, nlp})){
         await this.handlers.expense.handle({
           user, 
           payload: {
