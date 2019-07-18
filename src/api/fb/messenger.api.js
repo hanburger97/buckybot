@@ -4,11 +4,6 @@ const EventEmitter = require('events').EventEmitter;
 const config = require('src/util/config.js');
 const axios = require('axios');
 
-// const NOTIFICATION_TYPE = {
-//   REGULAR: 'REGULAR',
-//   SILENT_PUSH: 'SILENT_PUSH',
-//   NO_PUSH: 'NO_PUSH',
-// };
 
 const MESSAGE_TYPE = {
   RESPONSE: 'RESPONSE',
